@@ -1,40 +1,18 @@
-import CategoryItem from "@/components/category-item";
 import NavBar from "@/components/navbar";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";;
+import CategoryItem from "@/components/category-item";
 
-// Buscando as categorias no backend
-// Tornando a função async para utilizar o await
-// O await espera a promise ser resolvida
-async function getCategories(){
-    // Guardar a resposta em uma variavel
-    const response = await fetch("http://localhost:8080/categories") // A função fetch retorna uma promise
-    return response.json()
-}
+import { getCategories } from "@/actions/category-actions";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
+import { Plus } from "lucide-react";
+
  
 export default async function CategoriesPage(){
-
-    /*
-    const data = [
-        {
-            "id": 1,
-            "name": "Lazer",
-            "icon": "Dices"
-        },
-        {
-            "id": 2,
-            "name": "Educação",
-            "icon": "Book"
-        },
-        {
-            "id": 3,
-            "name": "Moradia",
-            "icon": "Home"
-        }
-    ]
-    */
-   
+  
     const data: Category[] = await getCategories()
+    console.log(data);
+    
 
     return(
         <>
@@ -45,11 +23,14 @@ export default async function CategoriesPage(){
                     <div className="flex justify-between">
 
                         <h2 className="text-lg font-semibold">Categorias</h2>
-                        <Button>
-                            <Plus />
-                            Nova categoria
-                        </Button>
                         
+                        {/* asChild faz com que o botão compile com o link dentro dele */}
+                        <Button asChild>
+                            <Link href="/categories/form">
+                                <Plus />
+                                Nova categoria
+                            </Link>
+                        </Button>
                     </div>
                     {data.map(category => <CategoryItem key={category.id} category={category}/>)}    
                 </div>
